@@ -114,7 +114,7 @@ class DeimsIcosFormatter extends FormatterBase {
 					\Drupal::logger('deims_icos_formatter')->notice(serialize(array()));
 				}
 				else {
-					$output = $landing_page_url;
+					$output = "There is data for this site in the ICOS Data Portal. Click here to <a href='$landing_page_url'>visit the ICOS Data Portal.</a>";
                 }
 			}
 			catch (GuzzleException $e) {
@@ -124,7 +124,6 @@ class DeimsIcosFormatter extends FormatterBase {
                 }
 				return array();
 			}
-			
 			
 			$elements[$delta] = [
 				'#markup' => $output,
