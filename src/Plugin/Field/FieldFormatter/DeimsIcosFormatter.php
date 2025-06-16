@@ -94,7 +94,7 @@ class DeimsIcosFormatter extends FormatterBase {
 			
 			$params = [
 			  'query' => $query_string,
-			  'format' => 'application/sparql-results+json',
+			  'format' => 'application/json',
 			];
 			
 			$output = "";
