@@ -62,7 +62,6 @@ class DeimsIcosFormatter extends FormatterBase {
 			$icos_station_code = '';
 		
 			// iterate through affiliation field and query ICOS station code
-			
 			foreach ($field_affiliation as $index => $field_affiliation_item) {
 				
 				if ($field_affiliation_item->entity instanceof Paragraph) {
@@ -74,9 +73,9 @@ class DeimsIcosFormatter extends FormatterBase {
 						$network_nid = $paragraph->get('field_network')->target_id;
 						if ($network_nid == 12825) {
 							$icos_station_code_string = $paragraph->get('field_network_specific_site_code')->value;
-							// potentially normalise ICOS station code
-							$normalised_icos_station_code = basename($icos_station_code);
-							\Drupal::logger('deims_icos_formatter')->info($normalised_icos_station_code);
+							// normalise ICOS station code
+							$icos_station_code = basename($icos_station_code_string);
+							\Drupal::logger('deims_icos_formatter')->info($icos_station_code);
 
 						}
 						
