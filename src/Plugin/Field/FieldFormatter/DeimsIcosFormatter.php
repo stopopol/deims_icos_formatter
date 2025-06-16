@@ -98,14 +98,14 @@ class DeimsIcosFormatter extends FormatterBase {
 			];
 			
 			$output = "";
-		  
-			$api_url = "https://meta.icos-cp.eu/sparqlclient/?type=JSON";
+
+			$api_url = "https://meta.icos-cp.eu/sparql";
 			
 			
 			try {
 				$response = \Drupal::httpClient()->get($api_url, array(
 					'query' => $params,
-					'headers' => array('Accept' => 'text/html'))
+					'headers' => array('Accept' => 'application/json'))
 				);
 				$data = (string) $response->getBody();
 				if (empty($data)) {
