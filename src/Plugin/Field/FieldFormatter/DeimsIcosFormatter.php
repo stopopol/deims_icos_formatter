@@ -95,7 +95,7 @@ class DeimsIcosFormatter extends FormatterBase {
 
 			$api_url = "https://meta.icos-cp.eu/sparql";
 			$base_url = "https://data.icos-cp.eu/portal/#";
-			$appendix = urlencode("{'filterCategories':{'station':['i$icos_station_code']}}");
+			$appendix = urlencode('{"filterCategories":{"station":["i'.$icos_station_code.'"]}}');
 			$landing_page_url = $base_url . $appendix;
 			\Drupal::logger('deims_icos_formatter')->info($landing_page_url);
 			
@@ -114,8 +114,7 @@ class DeimsIcosFormatter extends FormatterBase {
 					\Drupal::logger('deims_icos_formatter')->notice(serialize(array()));
 				}
 				else {
-					//$data = json_decode($data, TRUE);
-					\Drupal::logger('deims_icos_formatter')->info(serialize($data));
+					$output = $landing_page_url;
                 }
 			}
 			catch (GuzzleException $e) {
