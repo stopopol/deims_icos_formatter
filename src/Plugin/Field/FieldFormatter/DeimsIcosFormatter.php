@@ -92,17 +92,22 @@ class DeimsIcosFormatter extends FormatterBase {
 			$query_string = file_get_contents(__DIR__ . '/icos.sparql');
 			$query_string = str_replace('{{replace-me}}', $icos_station_code, $query_string);
 			
-			\Drupal::logger('deims_icos_formatter')->info($query_string);
+			$params = [
+			  'query' => $query_string,
+			  'format' => 'application/sparql-results+json',
+			];
 			
 			$output = "";
-			
-			/*
 		  
-			$api_url = "https://dar.elter-ri.eu/api/search/?q=&sort=newest&page=1&size=10&metadata_siteReferences_siteID=" . $item->value;
+			$api_url = "https://meta.icos-cp.eu/sparqlclient/";
+			
 			$landing_page_url = "https://dar.elter-ri.eu/search/?q=&l=list&p=1&s=10&sort=newest&f=metadata_siteReferences_siteID:" . $item->value;
 			
 			try {
-				$response = \Drupal::httpClient()->get($api_url, array('headers' => array('Accept' => 'application/json')));
+				$response = \Drupal::httpClient()->get($api_url, array(
+					'query' => $params,
+					'headers' => array('Accept' => 'application/json'))
+				);
 				$data = (string) $response->getBody();
 				if (empty($data)) {
 					// potentially add a more meaningful error message here in case data can't be fetched from ICOS
@@ -120,54 +125,10 @@ class DeimsIcosFormatter extends FormatterBase {
 				return array();
 			}
 			
-			if (intval($data["hits"]["total"])>0) {
-				
-				$maxIterations = 5;
-				$count = 0;
-				$dataset_list = "<ul>";
-
-				foreach ($data["hits"]["hits"] as $key => $value) {
-					if ($count >= $maxIterations) {
-						break;
-					}
-					$count++;
-				
-					$url = htmlspecialchars($value["links"]["self_html"] ?? '#', ENT_QUOTES, 'UTF-8');
-					$title = htmlspecialchars($value["metadata"]["titles"][0]["titleText"] ?? 'Untitled', ENT_QUOTES, 'UTF-8');
-					$dataset_list .= "<li><a href='$url'>$title</a></li>";
-					
-				}
-				
-				$dataset_list .= "</ul>";
-				
-				if ($data["hits"]["total"] == 1) {
-					$output = "There is one dataset for this site available in ICOS:";
-				}
-				else {
-					$output = "There is a total of " . $data["hits"]["total"] . " datasets for this site available in ICOS.";
-				}
-				
-				if ($count>0) {
-					if ($data["hits"]["total"]>5) {
-						$output .= " The latest ones include:";
-					} 
-					$output .= $dataset_list;
-				}
-				$output .= "To see more <a href='$landing_page_url'>visit the ICOS Portal.</a>";
-
-			}
-			else {
-				// need to return empty array for Drupal to realise the field is empty without throwing an error
-				return array();
-			}
-			
-			*/
 			
 			$elements[$delta] = [
 				'#markup' => $output,
 			];
-			
-			
 
 		}
 
