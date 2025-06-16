@@ -101,7 +101,6 @@ class DeimsIcosFormatter extends FormatterBase {
 		  
 			$api_url = "https://meta.icos-cp.eu/sparqlclient/";
 			
-			$landing_page_url = "https://dar.elter-ri.eu/search/?q=&l=list&p=1&s=10&sort=newest&f=metadata_siteReferences_siteID:" . $item->value;
 			
 			try {
 				$response = \Drupal::httpClient()->get($api_url, array(
