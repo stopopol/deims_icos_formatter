@@ -89,12 +89,16 @@ class DeimsIcosFormatter extends FormatterBase {
 			
 			// use station code to query ICOS portal - see sparql query
 			$query_string = file_get_contents(__DIR__ . '/icos.sparql');
+			
+			$prefixes_to_remove = ["ES_","AS_","OC_"];
+			$station_code_without_prefix = $result = str_replace($prefixes_to_remove, '', $icos_station_code);
+
 			$query_string = str_replace('{{replace-me}}', $icos_station_code, $query_string);
 			
 			$output = "";
 
 			$api_url = "https://meta.icos-cp.eu/sparql";
-			$landing_page_url = "https://data.icos-cp.eu/portal/#{'filterCategories':{'station':['$icos_station_code']}}";
+			$landing_page_url = "https://data.icos-cp.eu/portal/#{'filterCategories':{'station':['$station_code_without_prefix']}}";
 			\Drupal::logger('deims_icos_formatter')->info($landing_page_url);
 			
 			try {
