@@ -92,21 +92,21 @@ class DeimsIcosFormatter extends FormatterBase {
 			$query_string = file_get_contents(__DIR__ . '/icos.sparql');
 			$query_string = str_replace('{{replace-me}}', $icos_station_code, $query_string);
 			
-			$params = [
-			  'query' => $query_string,
-			  'format' => 'application/json',
-			];
-			
+
 			$output = "";
 
 			$api_url = "https://meta.icos-cp.eu/sparql";
 			
 			try {
-				$response = \Drupal::httpClient()->get($api_url, array(
-					'query' => $params,
-					'headers' => array('Accept' => 'application/sparql-results+json'))
+				$response = \Drupal::httpClient()->post($api_url, array(
+					'headers' => array(
+						'Accept' => 'application/sparql-results+json',
+						'Content-Type' => 'application/sparql-query',
+					),
+					'body' => $query_string,
 				);
 				$data = (string) $response->getBody();
+				
 				if (empty($data)) {
 					// potentially add a more meaningful error message here in case data can't be fetched from ICOS
 					\Drupal::logger('deims_icos_formatter')->notice(serialize(array()));
