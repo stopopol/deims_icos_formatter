@@ -90,6 +90,7 @@ class DeimsIcosFormatter extends FormatterBase {
 			// use station code to query ICOS portal - see sparql query
 			// render query result
 			require_once __DIR__ . '/query.php';
+			\Drupal::logger('deims_icos_formatter')->info($query);
 			
 			$output = "";
 			
