@@ -98,8 +98,8 @@ class DeimsIcosFormatter extends FormatterBase {
 			$output = "";
 
 			$api_url = "https://meta.icos-cp.eu/sparql";
-			$base_url = "https://data.icos-cp.eu/portal/";
-			$appendix = urlencode("#{'filterCategories':{'station':['$station_code_without_prefix']}}";
+			$base_url = "https://data.icos-cp.eu/portal/#";
+			$appendix = urlencode("{'filterCategories':{'station':['$station_code_without_prefix']}}");
 			$landing_page_url = $base_url . $appendix;
 			\Drupal::logger('deims_icos_formatter')->info($landing_page_url);
 			
