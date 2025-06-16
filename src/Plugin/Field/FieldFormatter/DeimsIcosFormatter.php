@@ -105,7 +105,7 @@ class DeimsIcosFormatter extends FormatterBase {
 			try {
 				$response = \Drupal::httpClient()->get($api_url, array(
 					'query' => $params,
-					'headers' => array('Accept' => 'application/json'))
+					'headers' => array('Accept' => 'text/html'))
 				);
 				$data = (string) $response->getBody();
 				if (empty($data)) {
