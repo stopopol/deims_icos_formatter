@@ -5,7 +5,6 @@ $query_string = "
 # query to return total number of datasets per site as well as latest five datasets
 # landing page for all datasets https://data.icos-cp.eu/portal/#%7B%22filterCategories%22%3A%7B%22station%22%3A%5B%22iES_SE-Sto%22%5D%7D%7D
 
-
 PREFIX cpmeta: <http://meta.icos-cp.eu/ontologies/cpmeta/>
 PREFIX prov:   <http://www.w3.org/ns/prov#>
 PREFIX rdfs:   <http://www.w3.org/2000/01/rdf-schema#>
@@ -27,7 +26,7 @@ WHERE {
       }
 
       ?allDobj cpmeta:hasObjectSpec ?spec ;
-               cpmeta:wasAcquiredBy/prov:wasAssociatedWith <http://meta.icos-cp.eu/resources/stations/" . $icos_station_code . "> .
+               cpmeta:wasAcquiredBy/prov:wasAssociatedWith <http://meta.icos-cp.eu/resources/stations/{{replace-me}}> .
 
       FILTER NOT EXISTS { [] cpmeta:isNextVersionOf ?allDobj }
     }
@@ -37,7 +36,7 @@ WHERE {
   {
     SELECT ?dobj ?datasetTitle
     WHERE {
-      VALUES ?station { <http://meta.icos-cp.eu/resources/stations/" . $icos_station_code . "> }
+      VALUES ?station { <http://meta.icos-cp.eu/resources/stations/{{replace-me}}> }
 
       ?spec cpmeta:hasDataLevel [] ;
             rdfs:label ?datasetTitle .
