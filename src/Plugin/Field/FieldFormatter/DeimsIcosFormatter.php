@@ -113,7 +113,7 @@ class DeimsIcosFormatter extends FormatterBase {
 				}
 				else {
 					$data = json_decode($data, TRUE);
-					\Drupal::logger('deims_icos_formatter')->info($data);
+					\Drupal::logger('deims_icos_formatter')->info(serialize($data));
                 }
 			}
 			catch (GuzzleException $e) {
