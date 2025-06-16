@@ -27,7 +27,7 @@ WHERE {
       }
 
       ?allDobj cpmeta:hasObjectSpec ?spec ;
-               cpmeta:wasAcquiredBy/prov:wasAssociatedWith <http://meta.icos-cp.eu/resources/stations/ES_SE-Sto> .
+               cpmeta:wasAcquiredBy/prov:wasAssociatedWith <http://meta.icos-cp.eu/resources/stations/" . $icos_station_code . "> .
 
       FILTER NOT EXISTS { [] cpmeta:isNextVersionOf ?allDobj }
     }
@@ -37,7 +37,7 @@ WHERE {
   {
     SELECT ?dobj ?datasetTitle
     WHERE {
-      VALUES ?station { <http://meta.icos-cp.eu/resources/stations/ES_SE-Sto> }
+      VALUES ?station { <http://meta.icos-cp.eu/resources/stations/" . $icos_station_code . "> }
 
       ?spec cpmeta:hasDataLevel [] ;
             rdfs:label ?datasetTitle .
