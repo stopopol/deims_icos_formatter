@@ -1,6 +1,0 @@
-name: DEIMS-SDR ICOS Formatter
-description: Provides a formatter for providing the links to the datasets of a site in ICOS
-package: DEIMS-SDR
-type: module
-version: 8.x-1.0
-core_version_requirement: ^9 || ^10 || ^11
