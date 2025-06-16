@@ -1,0 +1,6 @@
+{
+    "name": "stopopol/deims_icos_formatter",
+    "description": "Field Formatter for the deims.id field to show available datasets in ICOS",
+    "type": "drupal-module",
+    "homepage": "https://github.com/stopopol/deims_icos_formatter"
+}
