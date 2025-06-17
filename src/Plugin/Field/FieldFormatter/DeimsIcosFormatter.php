@@ -75,7 +75,7 @@ class DeimsIcosFormatter extends FormatterBase {
 							$icos_station_code_string = $paragraph->get('field_network_specific_site_code')->value;
 							// normalise ICOS station code
 							$icos_station_code = basename($icos_station_code_string);
-							\Drupal::logger('deims_icos_formatter')->info($icos_station_code);
+							// \Drupal::logger('deims_icos_formatter')->info($icos_station_code);
 
 						}
 						
@@ -97,7 +97,7 @@ class DeimsIcosFormatter extends FormatterBase {
 			$base_url = "https://data.icos-cp.eu/portal/#";
 			$appendix = urlencode('{"filterCategories":{"station":["i'.$icos_station_code.'"]}}');
 			$landing_page_url = $base_url . $appendix;
-			\Drupal::logger('deims_icos_formatter')->info($landing_page_url);
+			// \Drupal::logger('deims_icos_formatter')->info($landing_page_url);
 			
 			try {
 				$response = \Drupal::httpClient()->post($api_url, [
