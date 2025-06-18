@@ -97,7 +97,6 @@ class DeimsIcosFormatter extends FormatterBase {
 			$base_url = "https://data.icos-cp.eu/portal/#";
 			$appendix = urlencode('{"filterCategories":{"station":["i'.$icos_station_code.'"]}}');
 			$landing_page_url = $base_url . $appendix;
-			// \Drupal::logger('deims_icos_formatter')->info($landing_page_url);
 			
 			try {
 				$response = \Drupal::httpClient()->post($api_url, [
@@ -111,9 +110,16 @@ class DeimsIcosFormatter extends FormatterBase {
 				
 				if (empty($data)) {
 					// potentially add a more meaningful error message here in case data can't be fetched from ICOS
-					\Drupal::logger('deims_icos_formatter')->notice(serialize(array()));
+					\Drupal::logger('deims_icos_formatter')->notice('No data returned from ICOS SPARQL API for station code: ' . $icos_station_code);
+
 				}
 				else {
+					$results_object = json_decode($response->getBody(), true);
+					
+					foreach ($results_object["results"]["bindings"] as $dataset) {
+						\Drupal::logger('deims_icos_formatter')->notice($dataset["datasetTitle"]["value"]);
+					}
+					
 					$output = "There is data for this site in the ICOS Data Portal. Click here to <a href='$landing_page_url'>visit the ICOS Data Portal.</a>";
                 }
 			}
