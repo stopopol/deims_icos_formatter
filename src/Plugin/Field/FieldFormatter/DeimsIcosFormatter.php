@@ -109,18 +109,23 @@ class DeimsIcosFormatter extends FormatterBase {
 				$data = (string) $response->getBody();
 				
 				if (empty($data)) {
-					// potentially add a more meaningful error message here in case data can't be fetched from ICOS
 					\Drupal::logger('deims_icos_formatter')->notice('No data returned from ICOS SPARQL API for station code: ' . $icos_station_code);
-
 				}
 				else {
+					
 					$results_object = json_decode($response->getBody(), true);
+					$dataset_list = "<ul>";
 					
 					foreach ($results_object["results"]["bindings"] as $dataset) {
 						\Drupal::logger('deims_icos_formatter')->notice($dataset["datasetTitle"]["value"]);
+						$title = $dataset["datasetTitle"]["value"];
+						$url = $dataset["url"]["value"];
+						$dataset_list .= "<li><a href='$url'>$title</a></li>";
+						
 					}
 					
-					$output = "There is data for this site in the ICOS Data Portal. Click here to <a href='$landing_page_url'>visit the ICOS Data Portal.</a>";
+					$dataset_list .= "</ul>";
+					$output = $dataset_list . "<br>There is data for this site in the ICOS Data Portal. Click here to <a href='$landing_page_url'>visit the ICOS Data Portal.</a>";
                 }
 			}
 			catch (GuzzleException $e) {
