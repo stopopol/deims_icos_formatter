@@ -59,7 +59,7 @@ class DeimsIcosFormatter extends FormatterBase {
 			// Since loadByProperties returns an array of entities, get the first one.
 			$node = reset($nodes);
 			$field_affiliation = $node->get('field_affiliation');
-			$icos_station_code = '';
+			$list_of_icos_station_codes = [];
 		
 			// iterate through affiliation field and query ICOS station code
 			foreach ($field_affiliation as $index => $field_affiliation_item) {
@@ -73,29 +73,54 @@ class DeimsIcosFormatter extends FormatterBase {
 						$network_nid = $paragraph->get('field_network')->target_id;
 						if ($network_nid == 12825) {
 							$icos_station_code_string = $paragraph->get('field_network_specific_site_code')->value;
-							// normalise ICOS station code
-							$icos_station_code = basename($icos_station_code_string);
-							// \Drupal::logger('deims_icos_formatter')->info($icos_station_code);
-
+							// check if there are multiple ICOS station codes
+							if (strpos($icos_station_code_string, ',') !== false) {
+								// Split the string at each comma
+								$list_of_icos_station_codes = explode(',', $icos_station_code_string);
+							}
+							else {
+								$list_of_icos_station_codes = [$icos_station_code_string];
+							}
 						}
-						
 					}
 				}
 			}					
 			
-			if ($icos_station_code == '') {
+			if (empty($list_of_icos_station_codes)) {
 				return array();
 			}
 			
+			$sparql_icos_station_string = "";
+			// normalise ICOS station code
+			foreach ($list_of_icos_station_codes as &$value) {
+				$value = trim($value);
+				$value = basename($value);
+				$sparql_icos_station_string .= "<http://meta.icos-cp.eu/resources/stations/$value> ";
+			}
+
 			// use station code to query ICOS portal - see sparql query
+			// <http://meta.icos-cp.eu/resources/stations/ES_FI-Ken> <http://meta.icos-cp.eu/resources/stations/AZR>
+			
 			$query_string = file_get_contents(__DIR__ . '/icos.sparql');
-			$query_string = str_replace('{{replace-me}}', $icos_station_code, $query_string);
+			$query_string = str_replace('{{replace-me}}', $sparql_icos_station_string, $query_string);
 			
 			$output = "";
 
 			$api_url = "https://meta.icos-cp.eu/sparql";
 			$base_url = "https://data.icos-cp.eu/portal/#";
-			$appendix = urlencode('{"filterCategories":{"station":["i'.$icos_station_code.'"]}}');
+			
+			$formatted_icos_stations_string = '';
+
+			//example for filtering by two stations: 
+			// https://data.icos-cp.eu/portal/#{"filterCategories":{"station":["iES_FI-Ken","iAZR"]}}
+			// Use a for loop to wrap each string with quotes and prefix with 'i'
+			foreach ($list_of_icos_station_codes as $current_code) {
+				$formatted_icos_stations_string .= '"i' . $current_code . '",'; // Append each modified element to the result string
+			}
+			// remove the last comma
+			$formatted_icos_stations_string = substr($formatted_icos_stations_string, 0, -1);
+			
+			$appendix = urlencode('{"filterCategories":{"station":[' . $formatted_icos_stations_string . ']}}');
 			$landing_page_url = $base_url . $appendix;
 			
 			try {
@@ -109,7 +134,7 @@ class DeimsIcosFormatter extends FormatterBase {
 				$data = (string) $response->getBody();
 				
 				if (empty($data)) {
-					\Drupal::logger('deims_icos_formatter')->notice('No data returned from ICOS SPARQL API for station code: ' . $icos_station_code);
+					\Drupal::logger('deims_icos_formatter')->notice('No data returned from ICOS SPARQL API for station code: ' . implode(', ', $list_of_icos_station_codes));
 				}
 				else {
 					
@@ -117,7 +142,6 @@ class DeimsIcosFormatter extends FormatterBase {
 					$dataset_list = "<ul>";
 					
 					foreach ($results_object["results"]["bindings"] as $dataset) {
-						\Drupal::logger('deims_icos_formatter')->notice($dataset["datasetTitle"]["value"]);
 						$title = $dataset["datasetTitle"]["value"];
 						$url = $dataset["url"]["value"];
 						$dataset_list .= "<li><a href='$url'>$title</a></li>";
