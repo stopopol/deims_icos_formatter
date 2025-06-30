@@ -6,49 +6,46 @@ PREFIX prov:   <http://www.w3.org/ns/prov#>
 PREFIX rdfs:   <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
 
-SELECT 	(?dobj AS ?url) 
-		?datasetTitle 
-		?total
+SELECT (?dobj AS ?url)
+       ?datasetTitle
+       ?total
 WHERE {
-  # Subquery to get the total count
   {
+    # Subquery: Total number of datasets
     SELECT (COUNT(?allDobj) AS ?total)
     WHERE {
+      VALUES ?station {
+        {{replace-me}}
+      }
       ?spec cpmeta:hasDataLevel [] ;
             cpmeta:hasAssociatedProject ?project .
-      FILTER(STRSTARTS(STR(?spec), 'http://meta.icos-cp.eu/'))
+      FILTER(STRSTARTS(STR(?spec), "http://meta.icos-cp.eu/"))
       FILTER NOT EXISTS {
-        ?project cpmeta:hasHideFromSearchPolicy 'true'^^xsd:boolean
+        ?project cpmeta:hasHideFromSearchPolicy true
       }
-
       ?allDobj cpmeta:hasObjectSpec ?spec ;
-               cpmeta:wasAcquiredBy/prov:wasAssociatedWith <http://meta.icos-cp.eu/resources/stations/{{replace-me}}> .
-
+               cpmeta:wasAcquiredBy/prov:wasAssociatedWith ?station .
       FILTER NOT EXISTS { [] cpmeta:isNextVersionOf ?allDobj }
     }
   }
 
-  # Latest 5 dataset titles logic
   {
+    # Subquery: Latest 5 datasets
     SELECT ?dobj ?datasetTitle
     WHERE {
-      VALUES ?station { <http://meta.icos-cp.eu/resources/stations/{{replace-me}}> }
-
-      ?spec cpmeta:hasDataLevel [] ;
-            rdfs:label ?datasetTitle .
-
-      FILTER STRSTARTS(STR(?spec), 'http://meta.icos-cp.eu/')
-
-      OPTIONAL {
-        ?spec cpmeta:hasAssociatedProject ?proj .
-        FILTER(?proj != cpmeta:hasHideFromSearchPolicy || 
-               NOT EXISTS { ?proj cpmeta:hasHideFromSearchPolicy 'true'^^xsd:boolean })
+      VALUES ?station {
+        {{replace-me}}
       }
-
+      ?spec cpmeta:hasDataLevel [] ;
+            rdfs:label ?datasetTitle ;
+            cpmeta:hasAssociatedProject ?project .
+      FILTER(STRSTARTS(STR(?spec), "http://meta.icos-cp.eu/"))
+      FILTER NOT EXISTS {
+        ?project cpmeta:hasHideFromSearchPolicy true
+      }
       ?dobj cpmeta:hasObjectSpec ?spec ;
             cpmeta:wasAcquiredBy/prov:wasAssociatedWith ?station ;
             cpmeta:wasSubmittedBy/prov:endedAtTime ?submTime .
-
       FILTER NOT EXISTS { [] cpmeta:isNextVersionOf ?dobj }
     }
     ORDER BY DESC(?submTime)
