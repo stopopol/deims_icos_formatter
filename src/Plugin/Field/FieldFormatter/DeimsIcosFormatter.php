@@ -150,7 +150,7 @@ class DeimsIcosFormatter extends FormatterBase {
 					
 					$dataset_list .= "</ul>";
 					$output = "Data for this site is available through the ICOS Data Portal. The most recent datasets include:<br>" . $dataset_list;
-					$output .= "You can <a href='$landing_page_url'>click here to access the data on ICOS Data Portal</a>.";
+					$output .= "You can <a href='$landing_page_url'>click here to access the data in the ICOS Data Portal</a>.";
                 }
 			}
 			catch (GuzzleException $e) {
