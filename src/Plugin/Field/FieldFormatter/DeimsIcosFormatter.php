@@ -32,7 +32,6 @@ class DeimsIcosFormatter extends FormatterBase {
 	/**
 	* {@inheritdoc}
 	*/
-   
 	public function settingsSummary() {
   		$summary = [];
 		$summary[] = $this->t('Formats a deims.id field of Drupal');
@@ -153,13 +152,13 @@ class DeimsIcosFormatter extends FormatterBase {
 						$output = "Data for this site is available through the ICOS Data Portal. The most recent datasets include:<br>" . $dataset_list;
 						$output .= "You can <a href='$landing_page_url'>click here to access the data in the ICOS Data Portal</a>.";
 					}
-                }
+                		}
 			}
 			catch (GuzzleException $e) {
 				if ($e->hasResponse()) {
-                    $response = $e->getResponse()->getBody()->getContents();
+                    			$response = $e->getResponse()->getBody()->getContents();
 					\Drupal::logger('deims_icos_formatter')->notice(serialize($response));
-                }
+                		}
 				return array();
 			}
 			
