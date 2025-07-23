@@ -98,7 +98,6 @@ class DeimsIcosFormatter extends FormatterBase {
 
 			// use station code to query ICOS portal - see sparql query
 			// <http://meta.icos-cp.eu/resources/stations/ES_FI-Ken> <http://meta.icos-cp.eu/resources/stations/AZR>
-			
 			$query_string = file_get_contents(__DIR__ . '/icos.sparql');
 			$query_string = str_replace('{{replace-me}}', $sparql_icos_station_string, $query_string);
 			
@@ -109,7 +108,7 @@ class DeimsIcosFormatter extends FormatterBase {
 			
 			$formatted_icos_stations_string = '';
 
-			//example for filtering by two stations: 
+			// example for filtering by two stations: 
 			// https://data.icos-cp.eu/portal/#{"filterCategories":{"station":["iES_FI-Ken","iAZR"]}}
 			// Use a for loop to wrap each string with quotes and prefix with 'i'
 			foreach ($list_of_icos_station_codes as $current_code) {
