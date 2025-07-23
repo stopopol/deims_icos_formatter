@@ -29,20 +29,19 @@ use GuzzleHttp\Exception\GuzzleException;
  
 class DeimsIcosFormatter extends FormatterBase {
 
-  /**
-   * {@inheritdoc}
-   */
+	/**
+	* {@inheritdoc}
+	*/
    
- 
 	public function settingsSummary() {
-		$summary = [];
+  		$summary = [];
 		$summary[] = $this->t('Formats a deims.id field of Drupal');
 		return $summary;
-	}
+  	}
 
-  /**
-   * {@inheritdoc}
-   */
+  	/**
+   	* {@inheritdoc}
+   	*/
 	public function viewElements(FieldItemListInterface $items, $langcode) {
 		$elements = [];
 		// Render each element as markup in case of multi-values.
