@@ -139,17 +139,20 @@ class DeimsIcosFormatter extends FormatterBase {
 					
 					$results_object = json_decode($response->getBody(), true);
 					\Drupal::logger('deims_icos_formatter')->notice('Log: ' . $response->getBody());
-					$dataset_list = "<ul>";
-					
-					foreach ($results_object["results"]["bindings"] as $dataset) {
-						$title = $dataset["datasetTitle"]["value"];
-						$url = $dataset["url"]["value"];
-						$dataset_list .= "<li><a href='$url'>$title</a></li>";
+
+					if (sizeof($results_object["results"]["bindings"]) > 0) {
+						$dataset_list = "<ul>";
+						
+						foreach ($results_object["results"]["bindings"] as $dataset) {
+							$title = $dataset["datasetTitle"]["value"];
+							$url = $dataset["url"]["value"];
+							$dataset_list .= "<li><a href='$url'>$title</a></li>";
+						}
+						
+						$dataset_list .= "</ul>";
+						$output = "Data for this site is available through the ICOS Data Portal. The most recent datasets include:<br>" . $dataset_list;
+						$output .= "You can <a href='$landing_page_url'>click here to access the data in the ICOS Data Portal</a>.";
 					}
-					
-					$dataset_list .= "</ul>";
-					$output = "Data for this site is available through the ICOS Data Portal. The most recent datasets include:<br>" . $dataset_list;
-					$output .= "You can <a href='$landing_page_url'>click here to access the data in the ICOS Data Portal</a>.";
                 }
 			}
 			catch (GuzzleException $e) {
