@@ -134,7 +134,6 @@ class DeimsIcosFormatter extends FormatterBase {
 					\Drupal::logger('deims_icos_formatter')->notice('No data returned from ICOS SPARQL API for station code: ' . implode(', ', $list_of_icos_station_codes));
 				}
 				else {
-					
 					$results_object = json_decode($response->getBody(), true);
 					\Drupal::logger('deims_icos_formatter')->notice('Log: ' . $response->getBody());
 
