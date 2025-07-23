@@ -139,7 +139,7 @@ class DeimsIcosFormatter extends FormatterBase {
 				else {
 					
 					$results_object = json_decode($response->getBody(), true);
-					\Drupal::logger('deims_icos_formatter')->notice('Log: ' . implode(', ', $results_object));
+					\Drupal::logger('deims_icos_formatter')->notice('Log: ' . $response->getBody());
 					$dataset_list = "<ul>";
 					
 					foreach ($results_object["results"]["bindings"] as $dataset) {
